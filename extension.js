@@ -24,11 +24,9 @@ import Clutter from 'gi://Clutter';
 
 import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
-//import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-const ByteArray = new TextDecoder(('utf-8'));
 const refreshInterval = 1;
 const speedUnits = [
     "B/s", "K/s", "M/s", "G/s", "T/s", "P/s", "E/s", "Z/s", "Y/s"
@@ -37,6 +35,7 @@ let lastTotalDownBytes = 0;
 let lastTotalUpBytes = 0;
 
 const getCurrentNetSpeed = (refreshInterval) => {
+    const ByteArray = new TextDecoder(('utf-8'));
     const speed = {"down": 0, "up": 0};
 
     try {
@@ -122,8 +121,8 @@ const toSpeedString = (speed) => {
     return `↓ ${formatSpeedWithUnit(speed["down"])} ↑ ${formatSpeedWithUnit(speed["up"])}`;
 };
 
-const Indicator = GObject.registerClass(
-class Indicator extends PanelMenu.Button {
+const pinguXNetLabel = GObject.registerClass(
+class pinguXNetLabel extends PanelMenu.Button {
     _init() {
         super._init(0.0, _('pinguXnetLabel',true));
 
@@ -133,15 +132,6 @@ class Indicator extends PanelMenu.Button {
         });
 
         this.add_child(this._label);
-
-        /*TODO
-        show interfaces seperately in popup menu
-        let item = new PopupMenu.PopupMenuItem(_("Show Notification"));
-        item.connect("activate", () => {
-            Main.notify(_("Whatʼs up, folks?"));
-        });
-        this.menu.addMenuItem(item);
-        */
     }
 
     setLabelText(text) {
@@ -149,12 +139,12 @@ class Indicator extends PanelMenu.Button {
     }
 });
 
-export default class IndicatorExampleExtension extends Extension {
+export default class PinguXNetLabelExtension extends Extension {
     enable() {
         lastTotalDownBytes = 0;
         lastTotalUpBytes = 0;
 
-        this._indicator = new Indicator();
+        this._indicator = new pinguXNetLabel();
         Main.panel.addToStatusArea(this.uuid, this._indicator);
 
         this._timeout = GLib.timeout_add_seconds(
