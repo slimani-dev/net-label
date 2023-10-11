@@ -1,7 +1,5 @@
 # TODO
 
-This is an example of TODO.md
-
 
 ### Todo
 
