@@ -100,31 +100,17 @@ const formatSpeedWithUnit = (amount) => {
         ++unitIndex;
     }
 
-    let digits = 0;
-    // Instead of showing 0.00123456 as 0.00, show it as 0.
-    if (amount >= 100 || amount - 0 < 0.01) {
-        // 100 M/s, 200 K/s, 300 B/s.
-        digits = 0;
-    } else if (amount >= 10) {
-        // 10.1 M/s, 20.2 K/s, 30.3 B/s.
-        digits = 1;
-    } else {
-        // 1.01 M/s, 2.02 K/s, 3.03 B/s.
-        digits = 2;
-    }
-
-    // See <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed>.
-    return `${amount.toFixed(digits)} ${speedUnits[unitIndex]}`;
+    return `${amount.toFixed(2)} ${speedUnits[unitIndex]}`;
 };
 
 const toSpeedString = (speed) => {
     return `↓ ${formatSpeedWithUnit(speed["down"])} ↑ ${formatSpeedWithUnit(speed["up"])}`;
 };
 
-const pinguXNetLabel = GObject.registerClass(
-class pinguXNetLabel extends PanelMenu.Button {
+const NetLabel = GObject.registerClass(
+class NetLabel extends PanelMenu.Button {
     _init() {
-        super._init(0.0, _('pinguXnetLabel',true));
+        super._init(0.0, _('netLabel',true));
 
         this._label = new St.Label({
             "y_align": Clutter.ActorAlign.CENTER,
@@ -139,13 +125,15 @@ class pinguXNetLabel extends PanelMenu.Button {
     }
 });
 
-export default class PinguXNetLabelExtension extends Extension {
+
+
+export default class NetLabelExtension extends Extension {
     enable() {
         lastTotalDownBytes = 0;
         lastTotalUpBytes = 0;
 
-        this._indicator = new pinguXNetLabel();
-        Main.panel.addToStatusArea(this.uuid, this._indicator);
+        this._indicator = new NetLabel();
+        Main.panel.addToStatusArea(this.uuid, this._indicator, 1, 'left');
 
         this._timeout = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT, refreshInterval, () => {

@@ -1,6 +1,6 @@
 {
-  "uuid": "pinguXnetLabel@pinguX.aTa",
-  "name": "pinguXnetLabel",
+  "uuid": "net-label@slimani.dev",
+  "name": "NetLabel",
   "description": "Shows current download upload speed on panel \nThis extension is a Gnome 45 adaption of Net Speed by AlynxZhou",
   "shell-version": [ "45" ],
   "url": "https://gitlab.com/_pinguX/pinguxnetlabel"
